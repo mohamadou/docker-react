@@ -8,8 +8,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t ziham/docker-react -f Dockerfile.dev .
+      - run: docker run -e CI=true ziham/docker-react npm test
+ 
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
 
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
@@ -22,6 +27,6 @@ jobs:
           application_name: docker-react
           environment_name: Dockerreact-env
           existing_bucket_name: elasticbeanstalk-us-east-2-894502452868
-          version_label: 12345
+          version_label: ${{ github.sha }}
           region: us-east-2
           deployment_package: deploy.zip
