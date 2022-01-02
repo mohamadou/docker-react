@@ -17,5 +17,5 @@ CMD npm run build
 
 #RUN PHASE
 FROM nginx
-EXPOSE 3000
+EXPOSE 80
 COPY --from=builder /home/node/app/build /usr/share/nginx/html
