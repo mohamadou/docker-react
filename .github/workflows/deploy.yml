@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: docker login -u ${{ secrets.DOCKER_USER }} -p '${{ secrets.DOCKER_PASSWORD }}'
+      - run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
       - run: docker build -t ziham/docker-react -f Dockerfile.dev .
       - run: docker run -e CI=true ziham/docker-react npm test
  
@@ -22,9 +22,9 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: docker-react
-          environment_name: Dockerreact-env-1
+          environment_name: Dockerreact-env
           existing_bucket_name: elasticbeanstalk-us-east-2-894502452868
-          version_label: Sample Application
+          version_label: ${{ github.sha }}
           region: us-east-2
           deployment_package: deploy.zip
           #use_existing_version_if_available: true

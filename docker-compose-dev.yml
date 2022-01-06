@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: frontend_web
     ports:
       - "3000:3000"
     volumes:
@@ -16,5 +15,4 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: frontend_test
     command: ["npm","run","test"]
