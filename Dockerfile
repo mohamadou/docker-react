@@ -1,4 +1,4 @@
-#BUILD PHASE
+#BUILD STAGE
 FROM node:17-alpine AS builder
 
 USER node
@@ -13,14 +13,16 @@ RUN npm install
 
 COPY --chown=node:node ./ ./
 
-#CMD ["npm", "run", "build"]
-
 RUN npm run build
 
-#RUN PHASE
+#RUN STAGE
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 # Remove default nginx static assets
 RUN rm -rf ./*
 EXPOSE 80
+# Copy static assets from builder stage
 COPY --from=builder /home/node/app/build .
+
+# Containers run nginx with global directives and daemon off
+#ENTRYPOINT ["nginx", "-g", "daemon off;"]
